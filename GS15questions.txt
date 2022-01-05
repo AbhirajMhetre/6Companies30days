@@ -1,0 +1,333 @@
+Print Anagrams Together
+
+class Solution{
+  public:
+    vector<vector<string> > Anagrams(vector<string>& string_list) {
+        vector<vector<string>> ans;
+        unordered_map<string,vector<string>> m;
+        for(auto s:string_list){
+            string h = s;
+            sort(h.begin(),h.end());
+            m[h].push_back(s);
+
+        }
+        for(auto k:m){
+            ans.push_back(k.second);
+        }
+        return ans;
+    }
+};
+
+
+Overlapping rectangles
+
+class Solution {
+ public:
+   int doOverlap(int l1[], int r1[], int l2[], int r2[]) {
+       
+       // If one rectangle is on left side of other
+       if (l1[0] > r2[0] || l2[0] > r1[0])
+           return false;
+
+       // If one rectangle is above other
+       if (r1[1] > l2[1] || r2[1] > l1[1])
+           return false;
+
+   return true;
+   }
+};
+
+
+Count the subarrays having product less than k
+
+class Solution{
+  public:
+    int countSubArrayProductLessThanK(const vector<int>& a, int n, long long k) {
+
+ long long prod=1;
+        int ans=0;
+        int j=0;
+        for(int i=0;i<n;i++)
+        {
+            prod*=a[i];
+            
+            if(prod>=k)
+            {
+                while(j<i && prod>0)
+                {
+                    prod=prod/a[j];
+                    
+                    if(prod<k)
+                    {
+                        ans+=i-j;
+                        j++;
+                        break;
+                    }
+                    j++;
+                }
+            }else
+                ans+=i-j+1;
+            
+        }
+        
+        return ans;
+    }
+};
+
+
+Run Length Encoding
+
+string encode(string src)
+{     
+    if(src == ""){
+        return "";
+    }
+  string ans = "";
+  char prev = src[0];
+  int freq = 1;
+  for(int i=1;i<src.size();i++){
+      if(src[i] == prev){
+          freq++;
+      }else{
+          string add = prev + to_string(freq);
+          ans += add;
+          prev = src[i];
+          freq = 1;
+      }
+  }
+    string add = prev + to_string(freq);
+    ans += add;
+  return ans;
+}   
+
+
+Ugly Numbers
+
+	ull getNthUglyNo(int n) {
+	    set<long long> q;
+    	q.insert(1);
+    	long long f;
+        while(n--){
+            auto it = q.begin();
+            f=*it;
+            q.erase(it);
+            q.insert(f*2);
+            q.insert(f*3);
+            q.insert(f*5);
+        }
+        return f;
+	}
+};
+
+
+
+1071. Greatest Common Divisor of Strings
+
+class Solution {
+public:
+    int gcd(int a, int b)
+    {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
+
+    }
+    string gcdOfStrings(string str1, string str2) {
+        int n1 = str1.size();
+        int n2 = str2.size();
+        int size = gcd(n1,n2);
+        string com = str1.substr(0,size);
+        int pos = 0;
+        while(pos<n1){
+            string curr = str1.substr(pos,size);
+            //cout<<curr<<" "<<com<<endl;
+            if(curr != com){
+                return "";
+            }
+            pos += size;
+        }
+        pos = 0;
+        //cout<<"======"<<endl;
+        while(pos<n2){
+            string curr = str2.substr(pos,size);
+              //cout<<curr<<" "<<com<<endl;
+            if(curr != com){
+                return "";
+            }
+            pos += size;
+        }
+        return com;
+        
+    }
+};
+
+Total Decoding Messages
+
+class Solution {
+	public:
+		int CountWays(string str){
+		    if(str== ""){
+		        return 1;
+		    }
+		    if(str[0] == '0'){
+		        return 0;
+		    }
+		    int n = str.size();
+		    int dp[n+1];
+		    dp[0] = 1;
+		    dp[1] = 1;
+		    for(int i=2;i<n+1;i++){
+		        dp[i] = 0;
+	            if (str[i-1] > '0')
+                    dp[i] = dp[i-1];
+                if (str[i-2] == '1' || (str[i-2] == '2' && str[i-1] < '7') )
+                    dp[i] += dp[i-2];
+		    }
+		    return dp[n];
+		}
+
+};
+
+
+Number following a pattern
+
+class Solution{   
+public:
+    string printMinNumberForPattern(string S){
+        string ans;
+        stack<int> st;
+        int num = 1;
+        for(auto it:S){
+            if(it == 'D'){
+                st.push(num);
+                num++;
+            }else{
+                st.push(num);
+                num++;
+                while(!st.empty()){
+                    ans += to_string(st.top());
+                    st.pop();
+                }
+            }
+        }
+        st.push(num);
+        while(!st.empty()){
+            ans += to_string(st.top());
+            st.pop();
+        }
+        return ans;
+    }
+};
+
+Squares in N*N Chessboard
+class Solution {
+  public:
+    long long squaresInChessBoard(long long N) {
+        return (n*(n+1)*((2*n)+1))/6;
+    }
+};
+
+Decode the string
+
+string decodedString(string s){
+        // code here
+        string num = "";
+        string ans="";
+        int n;
+        string temp="";
+        string temp2="";
+        stack<char> st;
+        int p = 0;
+        
+        while(p<s.size())
+        {    if(s[p]==']')
+             {  while(st.top() != '[')
+                {
+                    temp=st.top()+temp;
+                    st.pop();
+                }
+                 st.pop();
+              while(isdigit(st.top()))
+                {    num=st.top()+num;
+                     st.pop();
+                     if(st.empty()){
+                         break;
+                     }
+                }
+                n=stoi(num);
+                for(int i=1;i<=n;i++)
+                {   temp2=temp2+temp;
+                }
+                if(st.empty())
+                {   ans=temp2;
+                    break;
+                }
+                for(int i=0;i<temp2.size();i++)
+                {    st.push(temp2[i]);
+                }
+                
+                temp="";
+                temp2="";
+                num="";
+            }
+            else
+            {    st.push(s[p]);
+            }
+            p++;
+        }
+        return ans;
+    }
+    
+    209. Minimum Size Subarray Sum
+    
+    class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int i=0;
+        int n = nums.size();
+        int j = 0;
+        int ans = INT_MAX;
+        int currsum = 0;
+        while(i<=j and j<n){
+            while(i<=j and j<n and currsum < target){
+                currsum += nums[j];
+                j++;
+            }
+            while(i<=j and currsum >= target){
+                //cout<<j<<" "<<i<<endl;
+                ans = min(ans,j-i);
+                currsum -= nums[i];
+                i++;
+            }
+        }
+        return ans == INT_MAX ? 0:ans;
+    }
+};
+
+Array Pair Sum Divisibility Problem
+
+class Solution {
+  public:
+    bool canPair(vector<int> nums, int k) {
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            nums[i] = nums[i]%k;
+        }
+        vector<int> mods(k,0);
+        for(int i=0;i<n;i++){
+            mods[nums[i]]++;
+        }
+        if(mods[0]%2 == 1){
+            return false;
+        }
+        for(int i=1;i<= k/2 ;i++){
+            if(mods[i] != mods[k-i]){
+                return false;
+            }
+        }
+        if(k%2 == 0 and mods[k/2]%2 == 1){
+            return false;
+        }
+        return true;
+    }
+  };
